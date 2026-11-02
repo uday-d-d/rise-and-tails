@@ -20,7 +20,6 @@ A fast, compassionate web platform that connects animal lovers with a local resc
 
 ## 📸 Preview
 
-> Add your screenshots here (create an `assets/` folder and drop the images in).
 
 | Home | Adopt | Urgent Rescue | NGO Dashboard |
 |:---:|:---:|:---:|:---:|
