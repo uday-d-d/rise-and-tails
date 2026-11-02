@@ -18,12 +18,12 @@ A fast, compassionate web platform that connects animal lovers with a local resc
 
 ---
 
+
 ## 📸 Preview
 
-
-| Home | Adopt | Urgent Rescue | NGO Dashboard |
+| **Home** | **Adopt** | **Urgent Rescue** | **NGO Dashboard** |
 |:---:|:---:|:---:|:---:|
-| `assets/home.png` | `assets/adopt.png` | `assets/rescue.png` | `assets/dashboard.png` |
+| ![Home](src/assets/home.png) | ![Adopt](src/assets/adopt.png) | ![Rescue](src/assets/rescue.png) | ![Dashboard](src/assets/dashboard.png) |
 
 ---
 
