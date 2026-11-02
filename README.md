@@ -1,104 +1,225 @@
-# Rise and Tails
+<div align="center">
 
-Build a clean, responsive, and compassionate website for an Animal Rescue and Adoption organization using React, Tailwind CSS, and standard UI components.
+# 🐾 Rise and Tails
 
-Key Features & Pages:
+### Every stray deserves a second chance.
 
-Header & Navigation:
+A fast, compassionate web platform that connects animal lovers with a local rescue NGO, for **urgent rescue alerts** and **pet adoption**, all within a smart **25 km service radius**.
 
-Clean navbar with tabs: Home, Adopt, Urgent Rescue, and an NGO Login button at the top right.
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-Adoption Page / Section:
+[Features](#-features) • [How it works](#-how-it-works) • [Tech stack](#-tech-stack) • [Getting started](#-getting-started) • [Database setup](#-database-setup) • [Admin panel](#-ngo-admin-panel) • [Roadmap](#-roadmap)
 
-Strictly limit species selection to only 2 options: "Dogs" or "Cats" (use toggle buttons or simple filtering).
+</div>
 
-Show pet card preview grids for available dogs and cats with image, age, name, and an "Adopt Me" button.
+---
 
-Clicking "Adopt Me" opens an Adoption Application Form with the following required fields:
+## 📸 Preview
 
-Full Name
+> Add your screenshots here (create an `assets/` folder and drop the images in).
 
-Email Address
+| Home | Adopt | Urgent Rescue | NGO Dashboard |
+|:---:|:---:|:---:|:---:|
+| `assets/home.png` | `assets/adopt.png` | `assets/rescue.png` | `assets/dashboard.png` |
 
-Phone Number
+---
 
-Home Address & City
+## ✨ Features
 
-Housing Type (e.g., House with yard, Apartment, Rented)
+### 🐶 For adopters
+- **Dogs or Cats**: a simple toggle to browse available pets
+- **Pet cards** with photo, name and age, plus an **Adopt Me** button
+- **Adoption application form**: name, email, phone, address, city, housing type and pet experience
+- **Track your request**: check the status of an application or rescue alert on the `/track` page
 
-Previous Pet Ownership Experience (Yes/No text area)
+### 🚨 For people who find an animal in need
+- **No login, no sign-up**: built to be as fast as possible
+- **One-tap GPS location** (or type an address)
+- **Photo upload or short description**, plus a contact number
+- Large, high-visibility **SEND URGENT RESCUE ALERT** button
+- **Emergency Call** quick-dial button at the top of the page
 
-Submit Application Button
+### 🏠 For the NGO team
+- **Secure admin login** with a server-checked, HTTP-only cookie session
+- **Adoption Requests** tab: full applicant details, **Approve / Reject** actions and admin notes
+- **Rescue Alerts** tab: live incoming alerts, with status *pending → dispatched → resolved*
+- **Editable NGO settings**: location and service radius
 
-Urgent Rescue Tab (Minimal & Fast Procedure):
+### 📍 Smart 25 km service radius
+Every request is checked with the **Haversine formula** against the NGO's location. Requests inside the radius go straight to the dashboard. Requests outside get a polite notice that they are redirected to a partner shelter network.
 
-Designed for immediate action since animals need urgent help.
+---
 
-Keep form fields to a absolute minimum (no login or registration required to submit):
+## 🔍 How it works
 
-Live Location / Pin GPS Location button or Address input (Required)
+```mermaid
+flowchart LR
+    A[Visitor submits<br/>adoption or rescue request] --> B[Haversine distance<br/>from NGO location]
+    B -->|within 25 km| C[Saved as pending]
+    B -->|beyond 25 km| D[Politely declined<br/>and redirected to partner shelters]
+    C --> E[Appears on NGO dashboard]
+    E --> F[Staff approves, rejects<br/>or dispatches]
+```
 
-Photo upload or brief status description (Required)
+The radius check is enforced **inside the database** (a Postgres trigger), so it cannot be bypassed from the browser.
 
-Reporter Contact Number (Required)
+---
 
-Large, high-visibility "SEND URGENT RESCUE ALERT" CTA button.
+## 🧰 Tech stack
 
-Add a quick-dial "Emergency Call" button at the top.
+| Layer | Technology |
+|---|---|
+| Frontend | React, TypeScript, Tailwind CSS |
+| Build tool | Vite |
+| Backend functions | Server functions (admin login and data access) |
+| Database | Supabase (PostgreSQL) |
+| Security | Row Level Security (RLS), role-based access (`staff`) |
+| Storage | Supabase Storage (private `rescue-photos` bucket) |
+| Realtime | Supabase Realtime (live rescue alerts) |
 
-NGO Admin Login & Dashboard:
+---
 
-Provide a lightweight page for NGO Admin Login (Username/Password).
+## 🚀 Getting started
 
-Once logged in, display an NGO Management Dashboard showing two main tabs:
+### Prerequisites
+- [Node.js](https://nodejs.org/) (LTS version)
+- npm (comes with Node.js)
+- A free [Supabase](https://supabase.com/) account
 
-Adoption Requests: Lists all submitted adoption application forms with full applicant details and an "Approve / Reject" action toggle.
+### 1. Clone the repository
 
-Rescue Alerts: Displays real-time rescue requests.
+```bash
+git clone https://github.com/YOUR_USERNAME/rise-and-tails.git
+cd rise-and-tails
+```
 
-25 km Radius Constraint System:
+### 2. Install dependencies
 
-Set the NGO's primary fixed coordinates/location (e.g., Default to City Center or editable in NGO Settings).
+```bash
+npm install
+```
 
-When a user submits an Urgent Rescue request or Adoption request, calculate the distance using Haversine formula (or a mock 25 km distance validator).
+### 3. Create your `.env` file
 
-If the request location is within 25 km, accept the request, notify the user with a confirmation screen, and push the record to the NGO Dashboard.
+Create a file named `.env` in the project root (next to `package.json`):
 
-If the location exceeds 25 km, display a polite notice: "Location out of 25 km service radius. Request redirected to partner shelter network."
+```env
+SUPABASE_PROJECT_ID="your-project-id"
+SUPABASE_URL="https://your-project-id.supabase.co"
+SUPABASE_PUBLISHABLE_KEY="your-publishable-key"
+SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
 
-Design & Vibe:
+VITE_SUPABASE_PROJECT_ID="your-project-id"
+VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="your-publishable-key"
 
-Warm, urgent yet hopeful color scheme (soft greens, warm orange accents for alerts, clean white background). Responsive across mobile and desktop devices.
+ADMIN_SESSION_SECRET="a-long-random-string"
+ADMIN_USERNAME="choose-a-username"
+ADMIN_PASSWORD="choose-a-strong-password"
+```
 
-This project was built with [Lovable](https://lovable.dev).
+| Variable | Purpose |
+|---|---|
+| `SUPABASE_URL` | Your project's API URL (`https://<project-id>.supabase.co`) |
+| `SUPABASE_PUBLISHABLE_KEY` | Public key, safe for the browser |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Secret** key used only on the server for the admin panel |
+| `ADMIN_SESSION_SECRET` | Long random text used to sign the admin login cookie |
+| `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Your NGO admin login |
 
-## Build with Lovable
+> ⚠️ **Never commit `.env`.** It contains secrets. Make sure `.env` is listed in `.gitignore`.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/13e29d8d-766e-5076-a0cb-699390ccf8f0).
+### 4. Run the project
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
 npm run dev
 ```
 
+Open the link shown in the terminal (usually `http://localhost:5173`).
 
-## NGO Admin Panel (login)
+---
 
-Open **NGO Login** in the top-right of the site (or go to `/ngo`).
+## 🗄️ Database setup
 
-- Default username: `admin`
-- Default password: `riseandtails@123`
+Your Supabase project starts empty, so create the tables first.
 
-Change them in `src/lib/admin-auth.server.ts`, or set `ADMIN_USERNAME` and `ADMIN_PASSWORD` environment variables on the server.
+1. **Create a storage bucket**: Supabase → **Storage → New bucket**. Name it exactly `rescue-photos` and keep it **private**.
+2. **Run the migrations**: Supabase → **SQL Editor → New query**. Run the files inside `supabase/migrations/` **in order** (oldest first), one at a time.
+3. **Set your NGO location**: the default is Mumbai, so change it to your NGO's coordinates:
 
-The login is checked on the server and kept in a secure, HTTP-only cookie (8 hours). The panel reads adoption requests and rescue alerts through server functions, so the server needs `SUPABASE_SERVICE_ROLE_KEY` set (Lovable Cloud provides it automatically; if you run locally, add it to your `.env`). Never commit the real key or expose it in browser code. Optionally set `ADMIN_SESSION_SECRET` to a long random string.
+   ```sql
+   update public.ngo_settings
+   set lat = YOUR_LATITUDE, lng = YOUR_LONGITUDE, radius_km = 25
+   where id = 1;
+   ```
+
+4. **Create the first admin user**: Supabase → **Authentication → Users → Add user**. The **first user created automatically receives the `staff` role**, so do this before anyone else signs up.
+
+You should now see these tables: `user_roles`, `ngo_settings`, `adoption_requests`, `rescue_alerts`.
+
+---
+
+## 🔐 NGO admin panel
+
+Open **NGO Login** in the top-right corner of the site, or go to `/ngo`.
+
+- Login is checked **on the server** and kept in a secure, HTTP-only cookie (8 hours).
+- Set your own `ADMIN_USERNAME` and `ADMIN_PASSWORD` in `.env`. **Do not use default credentials in production.**
+- The dashboard reads data through server functions, so `SUPABASE_SERVICE_ROLE_KEY` must be set on the server.
+
+---
+
+## 🛡️ Security notes
+
+- Row Level Security is enabled on every table
+- Only users with the `staff` role can read or update requests and alerts
+- The service role key is never exposed to browser code
+- Rescue photos are stored in a **private** bucket, readable only by staff
+- Input length limits are enforced in the database
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Restrict the public "track request" lookup so users see only their own requests
+- [ ] Email or SMS notifications when a request is approved
+- [ ] Admin screen to add, edit and remove pets
+- [ ] Map view of rescue alerts for faster dispatch
+- [ ] Partner shelter directory for out-of-radius requests
+- [ ] Multi-language support (English, Hindi, Marathi)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m "Add amazing feature"`
+4. Push the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+---
+
+## 👤 Author
+
+**YOUR NAME**
+GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
+
+---
+
+## 💚 Acknowledgements
+
+- Initial scaffolding generated with [Lovable](https://lovable.dev)
+- Backend powered by [Supabase](https://supabase.com)
+- Built to help the street animals of our city
+
+<div align="center">
+
+**If this project helps you, please give it a ⭐**
+
+</div>
